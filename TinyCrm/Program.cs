@@ -27,6 +27,7 @@ namespace TinyCrm
             List<Product> product = new List<Product>();
             List<string> lines = File.ReadAllLines(filePath).ToList();
 
+
             foreach (var line in lines)
             {
                 string[] entries =  line.Split(';');
@@ -36,30 +37,25 @@ namespace TinyCrm
                 newProduct.ProductId = entries[0];
                 newProduct.ProductName = entries[1];
                 newProduct.Description = entries[2];
+               // adding random prices{not correct}
+                AddPriceValue(product);
 
                 product.Add(newProduct);
             }
 
-            
+            foreach (var prod  in product)
+            {
+                Console.WriteLine($"{prod.ProductId} : {prod.ProductName} : {prod.Description} : {prod.Price}");
+            }
         }
-       
 
-        public static double Price()
-        {
-            var price = RDouble() * RInt() * 10;
-            return price;
-        }
-        public static double RDouble()
+        public static void AddPriceValue(List<Product> products)
         {
             Random random = new Random();
-            var value = random.NextDouble();
-            return value;
-        }
-        public static int RInt()
-        {
-            Random random = new Random();
-            var value = random.Next(1,10);
-            return value;
+            foreach (Product item in products)
+            {
+                item.Price = Convert.ToDecimal(Math.Round((random.NextDouble()) * 10, 2));
+            }
         }
 
     }
