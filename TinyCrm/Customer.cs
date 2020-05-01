@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TinyCrm
 {
     public class Customer
     {
-        public DateTime Created { get; private set; }
+        public string CustomerId { get; set; }
+        public DateTime Created { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
-        public string VatNumber { get; set; }
+        public string VatNumber { get; private set; }
         public string Phone { get; set; }
         public decimal TotalGross { get; private set; }
         public bool IsActive { get; set; }
@@ -22,7 +21,7 @@ namespace TinyCrm
             {
                 throw new Exception("Invalid VatNumber");
             }
-            
+
             VatNumber = vatNumber;
             Created = DateTime.Now;
         }
@@ -38,6 +37,5 @@ namespace TinyCrm
         {
             return Age >= 18;
         }
-         
     }
 }
