@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace TinyCrm
 {
@@ -25,41 +23,36 @@ namespace TinyCrm
                 return;
             }
 
-            var productsList = new List<Product>();
+            var productsArray = new Product[productsFromFile.Length];
 
             for (var i = 0; i < productsFromFile.Length; i++)
             {
+                var isDuplicate = false;
                 var values = productsFromFile[i].Split(';');
-                var productId = values[0];
 
-                var l = productsList
-                    .Where(product => product.ProductId.Equals(productId))
-                    .Any();
-
-                if (l)
+                foreach (var p in productsArray)
                 {
-                    continue;
+                    if (p != null && p.ProductId.Equals(values[0]))
+                    {
+                        isDuplicate = true;
+                    }
                 }
-                //foreach (var p in productsArray)
-                //{
-                //    if (p != null && p.ProductId.Equals(values[0]))
-                //    {
-                //        isDuplicate = true;
-                //    }
-                //}
 
-                var product = new Product()
+                if (!isDuplicate)
                 {
-                    ProductId = values[0],
-                    Name = values[1],
-                    Description = values[2],
-                    Price = GetRandomPrice()
-                };
+                    var product = new Product(values[0], values[1])
+                    {
+                        ProductId = values[0],
+                        Name = values[1],
+                        Description = values[2],
+                        Price = GetRandomPrice()
+                    };
 
-                productsList.Add(product);
+                    productsArray[i] = product;
+                }
             }
 
-            foreach (var p in productsList)
+            foreach (var p in productsArray)
             {
                 if (p != null)
                 {
@@ -76,6 +69,5 @@ namespace TinyCrm
 
             return (decimal)roundedNumber;
         }
-
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TinyCrm
 {
@@ -15,17 +17,34 @@ namespace TinyCrm
         public bool IsActive { get; set; }
         public int Age { get; set; }
 
+        public List<Order> Orders = new List<Order>();
+
         public Customer(string vatNumber)
         {
             if (!IsValidVatNumber(vatNumber))
             {
                 throw new Exception("Invalid VatNumber");
             }
-
             VatNumber = vatNumber;
             Created = DateTime.Now;
         }
+        public bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return false;
+            }
 
+            email = email.Trim();
+
+            if (email.Contains("@") && (email.EndsWith(".com") || (email.EndsWith(".gr"))))
+            {
+                var count = email.Count(x => x == '@');
+
+                return count == 1;
+            }
+            return false;
+        }
         public bool IsValidVatNumber(string vatNumber)
         {
             return
@@ -37,5 +56,6 @@ namespace TinyCrm
         {
             return Age >= 18;
         }
+        
     }
 }
