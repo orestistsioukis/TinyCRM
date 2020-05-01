@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace TinyCrm
 {
@@ -23,36 +25,41 @@ namespace TinyCrm
                 return;
             }
 
-            var productsArray = new Product[productsFromFile.Length];
+            var productsList = new List<Product>();
 
             for (var i = 0; i < productsFromFile.Length; i++)
             {
-                var isDuplicate = false;
                 var values = productsFromFile[i].Split(';');
+                var productId = values[0];
 
-                foreach (var p in productsArray)
+                var l = productsList
+                    .Where(product => product.ProductId.Equals(productId))
+                    .Any();
+
+                if (l)
                 {
-                    if (p != null && p.ProductId.Equals(values[0]))
-                    {
-                        isDuplicate = true;
-                    }
+                    continue;
                 }
+                //foreach (var p in productsArray)
+                //{
+                //    if (p != null && p.ProductId.Equals(values[0]))
+                //    {
+                //        isDuplicate = true;
+                //    }
+                //}
 
-                if (!isDuplicate)
+                var product = new Product()
                 {
-                    var product = new Product()
-                    {
-                        ProductId = values[0],
-                        Name = values[1],
-                        Description = values[2],
-                        Price = GetRandomPrice()
-                    };
+                    ProductId = values[0],
+                    Name = values[1],
+                    Description = values[2],
+                    Price = GetRandomPrice()
+                };
 
-                    productsArray[i] = product;
-                }
+                productsList.Add(product);
             }
 
-            foreach (var p in productsArray)
+            foreach (var p in productsList)
             {
                 if (p != null)
                 {
