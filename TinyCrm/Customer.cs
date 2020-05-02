@@ -13,7 +13,7 @@ namespace TinyCrm
         public string Email { get; set; }
         public string VatNumber { get; private set; }
         public string Phone { get; set; }
-        public decimal TotalGross { get; private set; }
+        public decimal TotalGross { get;  set; }
         public bool IsActive { get; set; }
         public int Age { get; set; }
 
@@ -56,6 +56,5 @@ namespace TinyCrm
         {
             return Age >= 18;
         }
-        
     }
 }

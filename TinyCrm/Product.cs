@@ -13,10 +13,6 @@ namespace TinyCrm
 
         public List<Order> Orders = new List<Order>();
 
-        public Product(string productId, string name)
-        {
-            ProductId = productId;
-            Name = name;
-        }
+        
     }
 }

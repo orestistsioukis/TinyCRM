@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace TinyCrm
 {
@@ -23,44 +26,60 @@ namespace TinyCrm
                 return;
             }
 
-            var productsArray = new Product[productsFromFile.Length];
+            var productsList = new List<Product>();
 
             for (var i = 0; i < productsFromFile.Length; i++)
             {
-                var isDuplicate = false;
                 var values = productsFromFile[i].Split(';');
+                var productId = values[0];
 
-                foreach (var p in productsArray)
+                //foreach (var p in productsArray) {
+                //    if (p != null && p.ProductId.Equals(values[0])) {
+                //        isDuplicate = true;
+                //    }
+                //}
+                var l = productsList
+                        .Where(product => product.ProductId.Equals(productId))
+                        .Any();
+
+                if (l)
                 {
-                    if (p != null && p.ProductId.Equals(values[0]))
-                    {
-                        isDuplicate = true;
-                    }
+                    continue;
                 }
 
-                if (!isDuplicate)
+                var product = new Product()
                 {
-                    var product = new Product(values[0], values[1])
-                    {
-                        ProductId = values[0],
-                        Name = values[1],
-                        Description = values[2],
-                        Price = GetRandomPrice()
-                    };
+                    ProductId = values[0],
+                    Name = values[1],
+                    Description = values[2],
+                    Price = GetRandomPrice()
+                };
 
-                    productsArray[i] = product;
-                }
+                productsList.Add(product);
             }
-
-            foreach (var p in productsArray)
+            foreach (var p in productsList)
             {
                 if (p != null)
                 {
                     Console.WriteLine($"{p.ProductId} {p.Name} {p.Price}");
+
                 }
             }
-        }
 
+            // Assignment 2
+            var customer1 = new Customer("123456789");
+            var customer2 = new Customer("923456781");
+
+            customer1.TotalGross = customer1.Orders.First().TotalAmount;
+            customer2.TotalGross = customer2.Orders.First().TotalAmount;
+
+            var productsSold = new List<Product>();
+            productsSold.AddRange(customer1.Orders.First().Products);
+            productsSold.AddRange(customer2.Orders.First().Products);
+
+           
+
+        }
         public static decimal GetRandomPrice()
         {
             var random = new Random();
@@ -68,6 +87,19 @@ namespace TinyCrm
             var roundedNumber = Math.Round(randomNumber, 2);
 
             return (decimal)roundedNumber;
+        }
+
+        public static List<Product> GetRandomProduct(this List<Product> selectedPro, List<Program> prodList)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                var rnd = new Random();
+                var rndProd = rnd.Next(0, prodList.Count);
+
+                selectedPro.Add(prodList[rndProd]);
+            }
+
+            return selectedPro;
         }
     }
 }
